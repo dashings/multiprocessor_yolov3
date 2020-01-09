@@ -3,7 +3,7 @@ import  cv2
 from PIL import Image
 
 class CameraProc(Process):
-    def __init__(self, filePath, imageQueue,  start_signal, pause_signal,  stop_signal, newInput_signal, inputEnd_Signal, detDone_signal):
+    def __init__(self, filePath, imageQueue,  start_signal, pause_signal,  stop_signal, newInput_signal, inputEnd_Signal, detDone_signal, newRltSignal):
         Process.__init__(self)
         self.filePath = filePath
         self.imageQueue = imageQueue
@@ -14,6 +14,7 @@ class CameraProc(Process):
         self.inputEnd_Signal = inputEnd_Signal
         # self.proc_endSignal = proc_finishSignal
         self.detDone_signal = detDone_signal
+        self.newRltSignal = newRltSignal
         self.isWorking = True
 
     def run(self):
@@ -56,6 +57,7 @@ class CameraProc(Process):
                 else:
                     cam.release()
                     self.inputEnd_Signal.set()
+                    self.newRltSignal.set()
                     self.start_signal.clear()
                     # print('camera end')
                     # print('imagesize{}'.format(self.imageQueue.qsize()))

@@ -59,6 +59,7 @@ class objrThread(threading.Thread):
         self.camereNewinputSignal = Event()
         self.camereInputendSignal = Event()
         self.detDoneSignal = Event()
+        self.newRltSignal = Event()
         self.cameraProc =  CameraProc(self.filePath,
                                       self.input_queue,
                                       self.camereStartSignal,
@@ -66,10 +67,10 @@ class objrThread(threading.Thread):
                                       self.camereStopSignal,
                                       self.camereNewinputSignal,
                                       self.camereInputendSignal,
-                                      self.detDoneSignal)
+                                      self.detDoneSignal,
+                                      self.newRltSignal)
 
         self.rlt_queue = mpQueue()
-        self.newRltSignal = Event()
         self.detproc = DetectorProc(self.input_queue,
                                     self.rlt_queue,
                                     self.camereNewinputSignal,
@@ -155,13 +156,18 @@ class objrThread(threading.Thread):
         self.cameraProc.start()
         self.detproc.start()
 
-        showcount = 0
+        # showcount = 0
 
         while self.isWorking:
+
+            if self.camereInputendSignal.is_set():
+                self.camereInputendSignal.clear()
+                self.finish_signal.emit()
+
             self.newRltSignal.wait()
             while not self.rlt_queue.empty():
 
-                showcount += 1
+                # showcount += 1
 
                 out_boxes, out_scores, out_classes, image, frameIndex = self.rlt_queue.get()
 
@@ -318,7 +324,7 @@ class objrThread(threading.Thread):
                             del (self.corrDict[key])
 
                 self.update_signal.emit(np.asarray(image))
-                print ('emit cout {}'.format(showcount))
+                # print ('emit cout {}'.format(showcount))
                 # print(notmatchList)
 
             self.newRltSignal.clear()
@@ -326,8 +332,8 @@ class objrThread(threading.Thread):
             if self.stopMainProcSignal.is_set():
                 break
 
-            if self.camereInputendSignal.is_set() and  self.input_queue.empty() and self.rlt_queue.empty():
-                self.finish_signal.emit()
+            # if self.camereInputendSignal.is_set() and  self.input_queue.empty() and self.rlt_queue.empty():
+            #     self.finish_signal.emit()
             #     if  not self.lastepochFlag :
             #         self.newRltSignal.set()
             #         self.lastepochFlag = True

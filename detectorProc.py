@@ -31,11 +31,11 @@ class DetectorProc(Process):
 
         dl_detector = DetectorProc.get_detector_instance(self.model_path, self.classes_path, self.anchors_path)
 
-        detcoutn = 0
+        # detcoutn = 0
         while True:
             self.newInputSignal.wait()
             while not self.inputQueue.empty():
-                print('det queue size {}'.format(self.inputQueue.qsize()))
+                # print('det queue size {}'.format(self.inputQueue.qsize()))
                 
                 frame, frameIndex = self.inputQueue.get()
                 frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB )
