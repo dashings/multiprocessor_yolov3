@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 import numpy as np
 import time, os, cv2
 import threading
@@ -15,7 +17,6 @@ from PIL import Image
 
 class objrThread(threading.Thread):
     dl_detector = None
-    # finish_signal = Event()
 
     def __init__(self, filePath, update_signal, finish_signal):
         super(objrThread, self).__init__()

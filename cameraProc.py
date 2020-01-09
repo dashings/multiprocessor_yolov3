@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 from multiprocessing import Process, Queue, Event
 import  cv2
 from PIL import Image
