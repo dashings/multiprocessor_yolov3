@@ -32,16 +32,18 @@ class objrThread(threading.Thread):
             class_names = f.readlines()
         self.class_names = [c.strip() for c in class_names]
 
-        hsv_tuples = [(x / len(self.class_names), 1., 1.)
-                      for x in range(len(self.class_names))]
-        self.colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))
-        self.colors = list(
-            map(lambda x: (int(x[0] * 255), int(x[1] * 255), int(x[2] * 255)),
-                self.colors))
-        np.random.seed(10101)  # Fixed seed for consistent colors across runs.
-        np.random.shuffle(self.colors)  # Shuffle colors to decorrelate adjacent classes.
-        np.random.seed(None)  # Reset seed to default
+        # hsv_tuples = [(x / len(self.class_names), 1., 1.)
+        #               for x in range(len(self.class_names))]
+        # self.colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))
+        # self.colors = list(
+        #     map(lambda x: (int(x[0] * 255), int(x[1] * 255), int(x[2] * 255)),
+        #         self.colors))
+        # np.random.seed(10101)  # Fixed seed for consistent colors across runs.
+        # np.random.shuffle(self.colors)  # Shuffle colors to decorrelate adjacent classes.
+        # np.random.seed(None)  # Reset seed to default
 
+        self.colors = [(0, 0, 255), (0, 255, 127), (173, 222, 255), (18, 153, 255), (214, 112, 218), (255, 153, 18),
+                       (255, 0, 0)]
 
         self.lastepochFlag =False
         self.isWorking = True
