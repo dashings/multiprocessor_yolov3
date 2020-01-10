@@ -116,6 +116,8 @@ class objrThread(threading.Thread):
 
     def startCamera(self, filePath):
         self.filePath.value = filePath
+        self.filename = filePath.split('/')[-1].split('.')[0]
+        self.f = open('./rlt_txt/' + self.filename + '.txt', 'a')
         self.camereInputendSignal.clear()
         self.camereStopSignal.clear()
         self.camereNotPauseSignal.set()
@@ -164,6 +166,7 @@ class objrThread(threading.Thread):
             if self.camereInputendSignal.is_set():
                 self.camereInputendSignal.clear()
                 self.finish_signal.emit()
+                self.f.close()
 
             self.newRltSignal.wait()
             while not self.rlt_queue.empty():
@@ -333,25 +336,6 @@ class objrThread(threading.Thread):
             if self.stopMainProcSignal.is_set():
                 break
 
-            # if self.camereInputendSignal.is_set() and  self.input_queue.empty() and self.rlt_queue.empty():
-            #     self.finish_signal.emit()
-            #     if  not self.lastepochFlag :
-            #         self.newRltSignal.set()
-            #         self.lastepochFlag = True
-            #         print('last1')
-            #     else:
-            #
-            #         print ('testTotalError: {}'.format(self.testTotalError))
-            #         print ('corrList{}'.format(self.corrList))
-            #         print('testDelError{}'.format(self.testDelError))
-            #         print('testTotalCorr{}'.format(self.testTotalCorr))
-            #         print('testDelCorr{}'.format(self.testDelCorr))
-            #
-            #         self.isWorking = False
-            #         # self.finish_signal.emit()
-            #         self.detproc.terminate()
-            #         print('last2')
-            #         self.f.close()
         # self.detproc.join()
 
 
